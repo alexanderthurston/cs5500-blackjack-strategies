@@ -2,6 +2,14 @@
 #include <mpi.h>
 
 #define MCW MPI_COMM_WORLD
+const int numOfSims = 10000;
+
+int gameSim(int yourTotal, int numAces, int dealerCard, int hit)
+{
+    //win = 2, tie = 1, lose = 0
+    int win = 1;
+    return win;
+}
 
 int simulateBlackJack(int simCode)
 {
@@ -9,22 +17,35 @@ int simulateBlackJack(int simCode)
     int dealerCard = ((simCode % 20) / 2) + 2; //11's are aces
     int yourTotal = simCode / 20;
     int numAces = 0;
-    if (yourTotal < 10)
+    if (yourTotal < 14)
     {
         yourTotal = 17 - yourTotal;
     }
     else
     {
-        yourTotal = 18 - yourTotal;
+        yourTotal = 20 - yourTotal;
         numAces = 1;
     }
-    return simCode;
+    std::cout << "I will simulate with dealer showing " << dealerCard << ". I have a (non-ace) total of " << yourTotal << " and " << numAces << " aces, and I will ";
+    if (hit)
+    {
+        std::cout << "not hit." << std::endl;
+    }
+    else
+    {
+        std::cout << "hit." << std::endl;
+    }
+    int winScore = 0;
+    for (int i = 0; i < numOfSims; i++)
+    {
+        winScore += gameSim(yourTotal, numAces, dealerCard, hit);
+    }
+    return winScore;
 }
 
 int main(int argc, char** argv) 
 {
-    const int simSize = 10000;
-    const int numSim = 340;
+    const int numSim = 380;
     const int killCode = -1;
     int rank, size, recieved, flag, rankRecieved;
     int simArray[3] = { 0 };
@@ -64,15 +85,14 @@ int main(int argc, char** argv)
             }
         }
     // Print Results
-        for (int i = 0; i < simsDone; i++)
-        {
-            std::cout << i << ":" << resultArray[i] << std::endl;
-        }
+        //for (int i = 0; i < simsDone; i++)
+        //{
+        //    std::cout << i << ":" << resultArray[i] << std::endl;
+        //}
 
 
     }
     else {   // Slave Nodes
-        int simRes;
         while (1) {
             MPI_Recv(&recieved, 1, MPI_INT, MPI_ANY_SOURCE, 0, MCW, MPI_STATUS_IGNORE);
             if (recieved == killCode)break;
