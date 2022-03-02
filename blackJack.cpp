@@ -17,13 +17,13 @@ int simulateBlackJack(int simCode)
     int dealerCard = ((simCode % 20) / 2) + 2; //11's are aces
     int yourTotal = simCode / 20;
     int numAces = 0;
-    if (yourTotal < 14)
+    if (yourTotal < 17)
     {
-        yourTotal = 17 - yourTotal;
+        yourTotal = 20 - yourTotal;
     }
     else
     {
-        yourTotal = 20 - yourTotal;
+        yourTotal = 26 - yourTotal;
         numAces = 1;
     }
     std::cout << "I will simulate with dealer showing " << dealerCard << ". I have a (non-ace) total of " << yourTotal << " and " << numAces << " aces, and I will ";
@@ -45,7 +45,7 @@ int simulateBlackJack(int simCode)
 
 int main(int argc, char** argv) 
 {
-    const int numSim = 380;
+    const int numSim = 500;
     const int killCode = -1;
     int rank, size, recieved, flag, rankRecieved;
     int simArray[3] = { 0 };
