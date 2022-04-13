@@ -4,7 +4,7 @@
 #include <fstream>
 
 #define MCW MPI_COMM_WORLD
-const int numOfSims = 1000000;
+const int numOfSims = 10000000;
 
 int gameSim(int yourTotal, int numAces, int dealerCard, int hit)
 {
@@ -117,6 +117,11 @@ int main(int argc, char** argv)
     MPI_Comm_rank(MCW, &rank);
     MPI_Comm_size(MCW, &size);
     std::srand(std::time(nullptr) + rank);
+    if (size == 1)
+    {
+        std::cout << "More than one node is required" << std::endl;
+        return -1;
+    }
     if (!rank) 
     { // Master Node 
         MPI_Status status;
